@@ -1,5 +1,7 @@
+print('Hello Mars')
+
 try:
-    with open('mission_computer_main.log', 'r') as log_file:
+    with open('./week1/mission_computer_main.log', 'r') as log_file:
         log_content = log_file.readlines()
 
     markdown_content = "# Log Analysis Report\n\n"
@@ -11,7 +13,7 @@ try:
         timestamp, event, message = line.strip().split(',')
         markdown_content += f"| {timestamp} | {event} | {message} |\n"
 
-    with open('log_analysis.md', 'w') as markdown_file:
+    with open('./week1/log_analysis.md', 'w') as markdown_file:
         markdown_file.write(markdown_content)
 
     print('로그 내용을 Markdown 형식으로 성공적으로 변환하고 저장했습니다.')

@@ -21,7 +21,7 @@ try:
         markdown_content += f"| {timestamp} | {event} | {message} |\n"
 
         # 문제가 되는 키워드를 저장
-        if 'unstable' in message or 'explosion' in message:
+        if 'unstable' in message or 'explosion' in message or 'powered down' in message:
             problematic_markdown_content += f'| {timestamp} | {event} | {message} |\n'
 
     # 전체 보고서 저장

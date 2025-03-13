@@ -7,14 +7,14 @@ try:
     # 로그를 역순으로 정렬한 것을 보고서 형식으로 작성
     sorted_log_content = sorted(log_content[1:], key=lambda x: x.split(',')[0], reverse=True)
 
-    markdown_content = "# Log Analysis Report\n\n"
-    markdown_content += "### Log Entries\n\n"
-    markdown_content += "| Timestamp | Event | Message |\n"
-    markdown_content += "| --- | --- | --- |\n"
+    markdown_content = '# Log Analysis Report\n\n'
+    markdown_content += '### Log Entries\n\n'
+    markdown_content += '| Timestamp | Event | Message |\n'
+    markdown_content += '| --- | --- | --- |\n'
 
-    problematic_markdown_content = "# Problematic Log Entries\n\n"
-    problematic_markdown_content += "| Timestamp | Event | Message |\n"
-    problematic_markdown_content += "| --- | --- | --- |\n"
+    problematic_markdown_content = '# Problematic Log Entries\n\n'
+    problematic_markdown_content += '| Timestamp | Event | Message |\n'
+    problematic_markdown_content += '| --- | --- | --- |\n'
 
     for line in sorted_log_content:
         timestamp, event, message = line.strip().split(',')
@@ -22,7 +22,7 @@ try:
 
         # 문제가 되는 키워드를 저장
         if 'unstable' in message or 'explosion' in message:
-            problematic_markdown_content += f"| {timestamp} | {event} | {message} |\n"
+            problematic_markdown_content += f'| {timestamp} | {event} | {message} |\n'
 
     # 전체 보고서 저장
     with open('./week1/log_analysis.md', 'w') as markdown_file:

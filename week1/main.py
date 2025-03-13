@@ -1,7 +1,7 @@
 print('Hello Mars')
 
 try:
-    with open('./week1/mission_computer_main.log', 'r') as log_file:
+    with open('./mission_computer_main.log', 'r') as log_file:
         log_content = log_file.readlines()
 
     # 로그를 역순으로 정렬한 것을 보고서 형식으로 작성
@@ -25,11 +25,11 @@ try:
             problematic_markdown_content += f'| {timestamp} | {event} | {message} |\n'
 
     # 전체 보고서 저장
-    with open('./week1/log_analysis.md', 'w') as markdown_file:
+    with open('./log_analysis.md', 'w') as markdown_file:
         markdown_file.write(markdown_content)
 
     # 문제가 되는 부분 따로 저장
-    with open('./week1/problematic_log_entries.md', 'w') as problematic_file:
+    with open('./problematic_log_entries.md', 'w') as problematic_file:
         problematic_file.write(problematic_markdown_content)
 
     print('로그 내용을 시간의 역순으로 Markdown 형식으로 성공적으로 변환하고 저장했습니다.')

@@ -4,6 +4,9 @@ try:
         lines = file.readlines()
     header = lines[0].strip().split(',')
     inventory = [line.strip().split(',') for line in lines[1:]]
+    print('-----List.csv 출력 값-----')
+    for item in inventory:
+        print(','.join(item))
 except FileNotFoundError:
     print('Error: 파일을 찾을 수 없습니다.')
 except Exception as e:

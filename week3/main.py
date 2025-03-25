@@ -1,5 +1,5 @@
 import random
-import datetime
+import time
 
 class DummySensor:
     def __init__(self):
@@ -22,9 +22,12 @@ class DummySensor:
 
     def get_env(self):
         env = self.env_values
-        log_entry = f"{datetime.datetime.now()} - 내부 온도: {env['mars_base_internal_temperature']}, 외부 온도: {env['mars_base_external_temperature']}, 내부 습도: {env['mars_base_internal_humidity']}, 외부 광량: {env['mars_base_external_illuminance']}, 내부 CO2: {env['mars_base_internal_co2']}, 내부 산소: {env['mars_base_internal_oxygen']}\n"
-        with open('./mars_base_log.txt', 'a') as log_file:
+        current_time = time.strftime("%Y-%m-%d %H:%M:%S")
+        log_entry = f"{current_time} - 화성 기지 내부 온도: {env['mars_base_internal_temperature']:.2f}, 화성 기지 외부 온도: {env['mars_base_external_temperature']:.2f}, 화성 기지 내부 습도: {env['mars_base_internal_humidity']:.2f}, 화성 기지 외부 광량: {env['mars_base_external_illuminance']:.2f}, 화성 기지 내부 이산화탄소 농도: {env['mars_base_internal_co2']:.2f}, 화성 기지 내부 산소 농도: {env['mars_base_internal_oxygen']:.2f}\n"
+        
+        with open('mars_base_log.txt', 'a') as log_file:
             log_file.write(log_entry)
+        
         return env
 
 # 인스턴스화 및 메소드 호출

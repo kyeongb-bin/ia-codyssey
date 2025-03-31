@@ -1,6 +1,7 @@
 import random
 import time
 import threading
+import json
 
 class DummySensor:
     def __init__(self):
@@ -59,10 +60,10 @@ class MissionComputer:
             self.sum_values['mars_base_internal_oxygen'] += sensor_data['mars_base_internal_oxygen']
             self.count += 1
 
-            print("Current Environment Data:")
-            print(self.env_values)
+            print("Current Environment Data (JSON):")
+            print(json.dumps(self.env_values, indent=4))  # JSON 형태로 출력
 
-            if self.count % 60 == 0:  # 5분마다 평균 출력
+            if self.count % 300 == 0:  # 5분마다 평균 출력
                 avg_values = {
                     'mars_base_internal_temperature': self.sum_values['mars_base_internal_temperature'] / self.count,
                     'mars_base_external_temperature': self.sum_values['mars_base_external_temperature'] / self.count,
@@ -71,8 +72,8 @@ class MissionComputer:
                     'mars_base_internal_co2': self.sum_values['mars_base_internal_co2'] / self.count,
                     'mars_base_internal_oxygen': self.sum_values['mars_base_internal_oxygen'] / self.count
                 }
-                print("Average Environment Data for the last 5 minutes:")
-                print(avg_values)
+                print("Average Environment Data for the last 5 minutes (JSON):")
+                print(json.dumps(avg_values, indent=4))  # JSON 형태로 출력
                 self.sum_values = {
                     'mars_base_internal_temperature': 0,
                     'mars_base_external_temperature': 0,

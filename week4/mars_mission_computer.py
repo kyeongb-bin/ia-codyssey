@@ -52,47 +52,29 @@ class MissionComputer:
         while self.running:
             sensor_data = ds.get_env()
             self.env_values = sensor_data
-            self.sum_values['mars_base_internal_temperature'] += sensor_data['mars_base_internal_temperature']
-            self.sum_values['mars_base_external_temperature'] += sensor_data['mars_base_external_temperature']
-            self.sum_values['mars_base_internal_humidity'] += sensor_data['mars_base_internal_humidity']
-            self.sum_values['mars_base_external_illuminance'] += sensor_data['mars_base_external_illuminance']
-            self.sum_values['mars_base_internal_co2'] += sensor_data['mars_base_internal_co2']
-            self.sum_values['mars_base_internal_oxygen'] += sensor_data['mars_base_internal_oxygen']
+            for key in self.env_values:
+                self.sum_values[key] += sensor_data[key]
             self.count += 1
 
-            print("Current Environment Data (JSON):")
-            print(json.dumps(self.env_values, indent=4))  # JSON 형태로 출력
+            print('Current Environment Data (JSON):')
+            print(json.dumps(self.env_values, indent=4))
 
-            if self.count % 300 == 0:  # 5분마다 평균 출력
-                avg_values = {
-                    'mars_base_internal_temperature': self.sum_values['mars_base_internal_temperature'] / self.count,
-                    'mars_base_external_temperature': self.sum_values['mars_base_external_temperature'] / self.count,
-                    'mars_base_internal_humidity': self.sum_values['mars_base_internal_humidity'] / self.count,
-                    'mars_base_external_illuminance': self.sum_values['mars_base_external_illuminance'] / self.count,
-                    'mars_base_internal_co2': self.sum_values['mars_base_internal_co2'] / self.count,
-                    'mars_base_internal_oxygen': self.sum_values['mars_base_internal_oxygen'] / self.count
-                }
-                print("Average Environment Data for the last 5 minutes (JSON):")
-                print(json.dumps(avg_values, indent=4))  # JSON 형태로 출력
-                self.sum_values = {
-                    'mars_base_internal_temperature': 0,
-                    'mars_base_external_temperature': 0,
-                    'mars_base_internal_humidity': 0,
-                    'mars_base_external_illuminance': 0,
-                    'mars_base_internal_co2': 0,
-                    'mars_base_internal_oxygen': 0
-                }
+            if self.count % 60 == 0:  # 5분마다 평균 출력 (5초 간격 * 60 = 5분)
+                avg_values = {key: self.sum_values[key] / self.count for key in self.env_values}
+                print('Average Environment Data for the last 5 minutes (JSON):')
+                print(json.dumps(avg_values, indent=4))
+                self.sum_values = {key: 0 for key in self.env_values}
                 self.count = 0
 
             time.sleep(5)
 
-def stop_system(mc):
-    input("Press Enter to stop the system...")
-    mc.running = False
-    print("System stopped....")
+    def stop_system(self):
+        input('Press Enter to stop the system...')
+        self.running = False
+        print('System stopped....')
 
-if __name__ == "__main__":
-    mc = MissionComputer()
-    t = threading.Thread(target=stop_system, args=(mc,))
-    t.start()
-    mc.get_sensor_data()
+if __name__ == '__main__':
+    RunComputer = MissionComputer()
+    stop_thread = threading.Thread(target=RunComputer.stop_system)
+    stop_thread.start()
+    RunComputer.get_sensor_data()

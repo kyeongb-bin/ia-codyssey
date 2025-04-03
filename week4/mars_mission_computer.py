@@ -3,16 +3,18 @@ import time
 import threading
 import json
 
+env_values = {
+    'mars_base_internal_temperature': 0,
+    'mars_base_external_temperature': 0,
+    'mars_base_internal_humidity': 0,
+    'mars_base_external_illuminance': 0,
+    'mars_base_internal_co2': 0,
+    'mars_base_internal_oxygen': 0
+}
+
 class DummySensor:
     def __init__(self):
-        self.env_values = {
-            'mars_base_internal_temperature': 0,
-            'mars_base_external_temperature': 0,
-            'mars_base_internal_humidity': 0,
-            'mars_base_external_illuminance': 0,
-            'mars_base_internal_co2': 0,
-            'mars_base_internal_oxygen': 0
-        }
+        self.env_values = env_values
 
     def set_env(self):
         self.env_values['mars_base_internal_temperature'] = random.uniform(18, 30)
@@ -28,22 +30,8 @@ class DummySensor:
 
 class MissionComputer:
     def __init__(self):
-        self.env_values = {
-            'mars_base_internal_temperature': 0,
-            'mars_base_external_temperature': 0,
-            'mars_base_internal_humidity': 0,
-            'mars_base_external_illuminance': 0,
-            'mars_base_internal_co2': 0,
-            'mars_base_internal_oxygen': 0
-        }
-        self.sum_values = {
-            'mars_base_internal_temperature': 0,
-            'mars_base_external_temperature': 0,
-            'mars_base_internal_humidity': 0,
-            'mars_base_external_illuminance': 0,
-            'mars_base_internal_co2': 0,
-            'mars_base_internal_oxygen': 0
-        }
+        self.env_values = env_values
+        self.sum_values = {key: 0 for key in self.env_values}
         self.count = 0
         self.running = True
 

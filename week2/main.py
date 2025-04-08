@@ -1,58 +1,41 @@
-# Mars_Base_Inventory_List.csv 파일을 읽어 리스트로 변환
+print('Hello Mars')
+
 try:
-    with open('./Mars_Base_Inventory_List.csv', 'r') as file:
-        lines = file.readlines()
-    header = lines[0].strip().split(',')
-    inventory = [line.strip().split(',') for line in lines[1:]]
-    print('-----List.csv 출력 값-----')
-    for item in inventory:
-        print(','.join(item))
+    with open('./mission_computer_main.log', 'r') as log_file:
+        log_content = log_file.readlines()
+
+    # 로그를 역순으로 정렬한 것을 보고서 형식으로 작성
+    sorted_log_content = sorted(log_content[1:], key=lambda x: x.split(',')[0], reverse=True)
+
+    markdown_content = '# Log Analysis Report\n\n'
+    markdown_content += '### Log Entries\n\n'
+    markdown_content += '| Timestamp | Event | Message |\n'
+    markdown_content += '| --- | --- | --- |\n'
+
+    problematic_markdown_content = '# Problematic Log Entries\n\n'
+    problematic_markdown_content += '| Timestamp | Event | Message |\n'
+    problematic_markdown_content += '| --- | --- | --- |\n'
+
+    for line in sorted_log_content:
+        timestamp, event, message = line.strip().split(',')
+        markdown_content += f"| {timestamp} | {event} | {message} |\n"
+
+        # 문제가 되는 키워드를 저장
+        if 'unstable' in message or 'explosion' in message or 'powered down' in message:
+            problematic_markdown_content += f'| {timestamp} | {event} | {message} |\n'
+
+    # 전체 보고서 저장
+    with open('./log_analysis.md', 'w') as markdown_file:
+        markdown_file.write(markdown_content)
+
+    # 문제가 되는 부분 따로 저장
+    with open('./problematic_log_entries.md', 'w') as problematic_file:
+        problematic_file.write(problematic_markdown_content)
+
+    print('로그 내용을 시간의 역순으로 Markdown 형식으로 성공적으로 변환하고 저장했습니다.')
+    print(f'문제가 되는 로그 엔트리 파일을 저장했습니다.')
+
 except FileNotFoundError:
-    print('Error: 파일을 찾을 수 없습니다.')
+    print('오류: 파일을 찾을 수 없습니다.')
 except Exception as e:
-    print(f'Error: {e}')
-
-# 인화성 지수로 정렬
-inventory.sort(key=lambda x: float(x[4]), reverse=True)
-
-# 인화성 지수가 0.7 이상인 항목을 별도로 출력
-high_flammability = [item for item in inventory if float(item[4]) >= 0.7]
-print('-----인화성 지수 >= 0.7-----')
-for item in high_flammability:
-    print(','.join(item))
-
-# 인화성 지수가 0.7 이상인 항목을 CSV 파일로 저장
-try:
-    with open('./Mars_Base_Inventory_danger.csv', 'w') as file:
-        file.write(','.join(header) + '\n')
-        for item in high_flammability:
-            file.write(','.join(item) + '\n')
-except Exception as e:
-    print(f'Error: {e}')
-
-# 전체 인벤토리를 인화성 지수로 정렬하여 Mars_Base_Inventory_List.csv 파일로 저장
-try:
-    with open('./Mars_Base_Inventory_List.csv', 'w') as file:
-        file.write(','.join(header) + '\n')
-        for item in inventory:
-            file.write(','.join(item) + '\n')
-except Exception as e:
-    print(f'Error: {e}')
-
-# 보너스 과제: 인화성 순서로 정렬된 배열의 내용을 이진 파일형태로 저장
-try:
-    with open('Mars_Base_Inventory_List.bin', 'wb') as binary_file:
-        for item in inventory:
-            # Join the item list into a single string and encode it to bytes
-            binary_file.write((','.join(item) + '\n').encode('utf-8'))
-except Exception as e:
-    print(f'Error while saving to binary file: {e}')
-
-# 보너스 과제: 저장된 Mars_Base_Inventory_List.bin의 내용을 다시 읽어 들여서 화면에 내용을 출력
-try:
-    with open('Mars_Base_Inventory_List.bin', 'rb') as binary_file:
-        content = binary_file.read().decode('utf-8')
-        print('-----Mars_Base_Inventory_List.bin 내용-----')
-        print(content)
-except Exception as e:
-    print(f'Error while reading from binary file: {e}')
+    print(f'예상치 못한 오류가 발생했습니다: {e}')

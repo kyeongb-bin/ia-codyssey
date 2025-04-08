@@ -1,0 +1,9 @@
+Operating System
+
+OS Version
+
+CPU Type
+
+CPU Cores
+
+Memory Size (GB)

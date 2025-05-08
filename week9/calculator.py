@@ -1,7 +1,6 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QGridLayout, QWidget, QLineEdit
 from PyQt5.QtCore import Qt
-import math
 
 class Calculator:
     def __init__(self):
@@ -70,21 +69,18 @@ class Calculator:
                 else:
                     return '오류'
 
-                # 소수점 6자리 이하 반올림
                 if isinstance(result, float):
                     result = round(result, 6)
-                
-                self.current_input = str(result)
+
                 self.reset()
-                self.current_input = str(result)  # 결과를 current_input에 저장
+                self.current_input = str(result)
                 return str(result)
             else:
                 return self.current_input
         except ZeroDivisionError:
             self.reset()
             return '오류: 0으로 나눔'
-        except Exception as e:
-            print(f"Calculation error: {e}")
+        except Exception:
             self.reset()
             return '오류'
 
@@ -100,6 +96,21 @@ class CalculatorApp(QMainWindow):
         self.setCentralWidget(central_widget)
         central_widget.setStyleSheet('background-color: black;')
 
+        # 수식 디스플레이 추가
+        self.formula_display = QLineEdit()
+        self.formula_display.setAlignment(Qt.AlignRight)
+        self.formula_display.setReadOnly(True)
+        self.formula_display.setStyleSheet("""
+            QLineEdit {
+                background-color: black;
+                color: gray;
+                font-size: 20px;
+                border: none;
+                padding: 5px;
+            }
+        """)
+
+        # 메인 디스플레이
         self.display = QLineEdit()
         self.display.setAlignment(Qt.AlignRight)
         self.display.setReadOnly(True)
@@ -115,6 +126,7 @@ class CalculatorApp(QMainWindow):
         self.display.setText('0')
 
         layout = QVBoxLayout()
+        layout.addWidget(self.formula_display)  # 수식 디스플레이 추가
         layout.addWidget(self.display)
 
         grid_layout = QGridLayout()
@@ -194,15 +206,7 @@ class CalculatorApp(QMainWindow):
         if text == 'AC':
             self.calculator.reset()
             self.display.setText('0')
-            self.display.setStyleSheet("""
-                QLineEdit {
-                    background-color: black;
-                    color: white;
-                    font-size: 40px;
-                    border: none;
-                    padding: 10px;
-                }
-            """)
+            self.formula_display.setText('')
         elif text.isdigit():
             self.calculator.append_number(text)
             self.display.setText(self.calculator.current_input)
@@ -214,6 +218,7 @@ class CalculatorApp(QMainWindow):
         elif text in ['+', '-', '×', '÷']:
             self.calculator.previous_value = float(self.calculator.current_input)
             self.calculator.pending_operation = text.replace('×', '*').replace('÷', '/')
+            self.formula_display.setText(f"{self.calculator.current_input} {text}")
             self.calculator.current_input = '0'
             self.calculator.decimal_present = False
             self.display.setText('0')
@@ -222,7 +227,7 @@ class CalculatorApp(QMainWindow):
             result = self.calculator.equal()
             self.display.setText(result)
             self.adjust_font_size(result)
-            self.calculator.reset()
+            self.formula_display.setText('')  # 수식 창 초기화
         elif text == '±':
             self.calculator.negative_positive()
             self.display.setText(self.calculator.current_input)
@@ -242,7 +247,7 @@ class CalculatorApp(QMainWindow):
             font_size = 30
         else:
             font_size = 40
-        
+
         self.display.setStyleSheet(f"""
             QLineEdit {{
                 background-color: black;

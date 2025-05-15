@@ -1,8 +1,8 @@
 import string
 import time
-from zipfile import ZipFile, BadZipFile
+from zipfile import ZipFile
 
-def unlock_zip_optimized():
+def unlock_zip():
     zip_filename = 'emergency_storage_key.zip'
     password_file = 'password.txt'
     charset = string.ascii_lowercase + string.digits
@@ -17,9 +17,8 @@ def unlock_zip_optimized():
                 print('압축파일에 파일이 없습니다.')
                 return
             test_file = file_list[0]
-            attempt_count = 0
-            sleep_interval = 5000
             print('브루트포스 시작')
+            start_time = time.time()
             for i in range(max_num):
                 n = i
                 pwd_chars = []
@@ -27,8 +26,10 @@ def unlock_zip_optimized():
                     pwd_chars.append(charset[n % base])
                     n //= base
                 password = ''.join(reversed(pwd_chars))
-                attempt_count += 1
-                print(f'\r현재 시도 중인 단어: {password}', end='', flush=True)
+
+                elapsed_time = time.time() - start_time
+                print(f'시도 횟수: {i+1}, 현재 시도 중인 단어: {password}, 경과 시간: {elapsed_time:.2f}초', end='\r', flush=True)
+
                 try:
                     with zf.open(test_file, pwd=password.encode('utf-8')) as f:
                         f.read(1)
@@ -48,4 +49,4 @@ def unlock_zip_optimized():
         print('예상치 못한 오류:', str(e))
 
 if __name__ == '__main__':
-    unlock_zip_optimized()
+    unlock_zip()

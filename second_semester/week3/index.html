@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+        <title>우주 해적 - Space Pirates</title>
+        <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                background: linear-gradient(
+                    135deg,
+                    #0c0c0c 0%,
+                    #1a1a2e 50%,
+                    #16213e 100%
+                );
+                color: #ffffff;
+                margin: 0;
+                padding: 0;
+                min-height: 100vh;
+            }
+
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            .header {
+                text-align: center;
+                padding: 40px 0;
+                border-bottom: 2px solid #4a9eff;
+                margin-bottom: 40px;
+            }
+
+            .header h1 {
+                font-size: 3em;
+                margin: 0;
+                background: linear-gradient(
+                    45deg,
+                    #4a9eff,
+                    #ff6b6b,
+                    #4ecdc4
+                );
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                text-shadow: 0 0 30px
+                    rgba(74, 158, 255, 0.5);
+            }
+
+            .header p {
+                font-size: 1.2em;
+                margin: 10px 0 0 0;
+                color: #b0b0b0;
+            }
+
+            .content {
+                display: grid;
+                grid-template-columns: repeat(
+                    auto-fit,
+                    minmax(300px, 1fr)
+                );
+                gap: 30px;
+                margin-bottom: 40px;
+            }
+
+            .card {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 15px;
+                padding: 25px;
+                border: 1px solid rgba(74, 158, 255, 0.3);
+                backdrop-filter: blur(10px);
+                transition: transform 0.3s ease,
+                    box-shadow 0.3s ease;
+            }
+
+            .card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 30px
+                    rgba(74, 158, 255, 0.3);
+            }
+
+            .card h2 {
+                color: #4a9eff;
+                margin-top: 0;
+                font-size: 1.5em;
+                border-bottom: 2px solid #4a9eff;
+                padding-bottom: 10px;
+            }
+
+            .card p {
+                line-height: 1.6;
+                color: #e0e0e0;
+            }
+
+            .card ul {
+                color: #e0e0e0;
+                line-height: 1.6;
+            }
+
+            .card li {
+                margin-bottom: 8px;
+            }
+
+            .highlight {
+                color: #ff6b6b;
+                font-weight: bold;
+            }
+
+            .footer {
+                text-align: center;
+                padding: 30px 0;
+                border-top: 2px solid #4a9eff;
+                color: #b0b0b0;
+            }
+
+            .pirate-ship {
+                font-size: 2em;
+                margin: 20px 0;
+            }
+
+            @keyframes float {
+                0%,
+                100% {
+                    transform: translateY(0px);
+                }
+                50% {
+                    transform: translateY(-10px);
+                }
+            }
+
+            .floating {
+                animation: float 3s ease-in-out infinite;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🏴‍☠️ 우주 해적 🏴‍☠️</h1>
+                <p>
+                    Space Pirates - 무한한 우주를 누비는
+                    자유로운 영혼들
+                </p>
+                <div class="pirate-ship floating">🚀⚓</div>
+            </div>
+
+            <div class="content">
+                <div class="card">
+                    <h2>🌟 우주 해적이란?</h2>
+                    <p>
+                        우주 해적은
+                        <span class="highlight"
+                            >무한한 우주 공간</span
+                        >을 누비며 자유롭게 활동하는
+                        모험가들입니다. 그들은 전통적인
+                        해적의 정신을 우주로 확장하여,
+                        은하계의 다양한 행성과 우주 정거장을
+                        돌아다니며 모험을 즐깁니다.
+                    </p>
+                    <p>
+                        우주 해적들은 단순한
+                        약탈자라기보다는
+                        <span class="highlight"
+                            >자유를 추구하는 탐험가</span
+                        >로서, 우주의 신비를 발견하고 새로운
+                        문명과 만나는 것을 목표로 합니다.
+                    </p>
+                </div>
+
+                <div class="card">
+                    <h2>⚔️ 주요 특징</h2>
+                    <ul>
+                        <li>
+                            <span class="highlight"
+                                >자유로운 정신:</span
+                            >
+                            어떤 권위에도 얽매이지 않는
+                            자유로운 영혼
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >탐험 정신:</span
+                            >
+                            미지의 우주 공간에 대한 끝없는
+                            호기심
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >우주선 조종:</span
+                            >
+                            첨단 우주선을 자유자재로
+                            조종하는 기술
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >다양한 종족:</span
+                            >
+                            인간, 외계인, 로봇 등 다양한
+                            종족이 함께 활동
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >보물 수집:</span
+                            >
+                            우주 각지의 희귀한 보물과 유물
+                            수집
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h2>🚀 우주선과 장비</h2>
+                    <p>
+                        우주 해적들은 각자 고유한 우주선을
+                        보유하고 있으며, 이들은 다음과 같은
+                        특징을 가집니다:
+                    </p>
+                    <ul>
+                        <li>
+                            <span class="highlight"
+                                >고속 우주선:</span
+                            >
+                            빠른 속도로 우주를 이동할 수
+                            있는 엔진
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >방어 시스템:</span
+                            >
+                            우주 방사선과 소행성으로부터
+                            보호
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >무기 시스템:</span
+                            >
+                            필요시 자신을 보호할 수 있는
+                            무기
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >생명 유지 시스템:</span
+                            >
+                            장기간 우주 여행을 위한 생명
+                            유지 장치
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h2>🌌 활동 지역</h2>
+                    <p>
+                        우주 해적들은
+                        <span class="highlight"
+                            >은하계 전역</span
+                        >에서 활동하며, 특히 다음과 같은
+                        지역을 선호합니다:
+                    </p>
+                    <ul>
+                        <li>
+                            <span class="highlight"
+                                >소행성대:</span
+                            >
+                            보물과 자원이 풍부한 소행성들
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >우주 정거장:</span
+                            >
+                            다양한 정보와 물품을 거래할 수
+                            있는 곳
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >미지의 행성:</span
+                            >
+                            아직 탐험되지 않은 신비로운
+                            행성들
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >네뷸라:</span
+                            >
+                            아름다운 우주 구름 속의 은밀한
+                            기지들
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h2>⚡ 모험과 위험</h2>
+                    <p>
+                        우주 해적의 삶은
+                        <span class="highlight"
+                            >모험과 위험</span
+                        >으로 가득합니다. 그들은 다음과 같은
+                        도전에 직면합니다:
+                    </p>
+                    <ul>
+                        <li>
+                            <span class="highlight"
+                                >우주 방사선:</span
+                            >
+                            치명적인 우주 방사선으로부터의
+                            보호
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >소행성 충돌:</span
+                            >
+                            예측 불가능한 소행성과의 충돌
+                            위험
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >외계 생명체:</span
+                            >
+                            미지의 외계 생명체와의 만남
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >우주 해적들:</span
+                            >
+                            다른 우주 해적들과의 경쟁과 갈등
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h2>🎯 우주 해적의 철학</h2>
+                    <p>
+                        우주 해적들은
+                        <span class="highlight"
+                            >자유, 모험, 우정</span
+                        >을 최고의 가치로 여깁니다. 그들은
+                        다음과 같은 철학을 가지고 있습니다:
+                    </p>
+                    <ul>
+                        <li>
+                            <span class="highlight"
+                                >자유로운 영혼:</span
+                            >
+                            어떤 규칙이나 제약에도 얽매이지
+                            않는 자유
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >끝없는 모험:</span
+                            >
+                            새로운 발견과 경험을 통한 성장
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >우주적 우정:</span
+                            >
+                            종족과 상관없이 진정한 우정을
+                            나누는 것
+                        </li>
+                        <li>
+                            <span class="highlight"
+                                >우주 보호:</span
+                            >
+                            우주의 아름다움과 평화를 지키는
+                            책임
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p>
+                    🏴‍☠️ 우주 해적의 모험은 계속됩니다... 🏴‍☠️
+                </p>
+                <p>
+                    무한한 우주에서 자유를 찾아 떠나는 모든
+                    영혼들에게 바칩니다.
+                </p>
+                <div class="pirate-ship">🚀⭐🌌</div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang='ko'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>게시판 - 질문 등록</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        input[type='text'],
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .question-list {
+            margin-top: 40px;
+        }
+
+        .question-item {
+            background-color: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            border-left: 4px solid #007bff;
+        }
+
+        .question-item h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .question-item p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .question-item .date {
+            color: #999;
+            font-size: 12px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <h1>게시판 - 질문 등록</h1>
+
+        <div id='message' class='message'></div>
+
+        <form id='questionForm'>
+            <div class='form-group'>
+                <label for='subject'>제목 *</label>
+                <input type='text' id='subject' name='subject' required placeholder='질문 제목을 입력하세요'>
+            </div>
+
+            <div class='form-group'>
+                <label for='content'>내용 *</label>
+                <textarea id='content' name='content' required placeholder='질문 내용을 입력하세요'></textarea>
+            </div>
+
+            <button type='submit'>질문 등록</button>
+        </form>
+
+        <div class='question-list'>
+            <h2>질문 목록</h2>
+            <div id='questionList' class='loading'>질문 목록을 불러오는 중...</div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = 'http://localhost:8000/api/question';
+
+        // 질문 등록 폼 제출 처리
+        document.getElementById('questionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const subject = document.getElementById('subject').value.trim();
+            const content = document.getElementById('content').value.trim();
+
+            // 빈 값 체크
+            if (!subject || !content) {
+                showMessage('제목과 내용을 모두 입력해주세요.', 'error');
+                return;
+            }
+
+            const submitButton = e.target.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+            submitButton.textContent = '등록 중...';
+
+            try {
+                const response = await fetch(API_BASE_URL + '/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        subject: subject,
+                        content: content,
+                    }),
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    showMessage('질문이 성공적으로 등록되었습니다!', 'success');
+                    document.getElementById('questionForm').reset();
+                    loadQuestions();
+                } else {
+                    const error = await response.json();
+                    showMessage('질문 등록에 실패했습니다: ' + (error.detail || '알 수 없는 오류'), 'error');
+                }
+            } catch (error) {
+                showMessage('질문 등록 중 오류가 발생했습니다: ' + error.message, 'error');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = '질문 등록';
+            }
+        });
+
+        // 메시지 표시 함수
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = 'message ' + type;
+            messageDiv.style.display = 'block';
+
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        // 질문 목록 로드
+        async function loadQuestions() {
+            try {
+                const response = await fetch(API_BASE_URL + '/');
+                if (response.ok) {
+                    const questions = await response.json();
+                    displayQuestions(questions);
+                } else {
+                    document.getElementById('questionList').innerHTML = '<p>질문 목록을 불러올 수 없습니다.</p>';
+                }
+            } catch (error) {
+                document.getElementById('questionList').innerHTML = '<p>질문 목록을 불러오는 중 오류가 발생했습니다.</p>';
+            }
+        }
+
+        // 질문 목록 표시
+        function displayQuestions(questions) {
+            const questionListDiv = document.getElementById('questionList');
+
+            if (questions.length === 0) {
+                questionListDiv.innerHTML = '<p>등록된 질문이 없습니다.</p>';
+                return;
+            }
+
+            questionListDiv.innerHTML = questions.map(question => {
+                const date = new Date(question.create_date);
+                const formattedDate = date.toLocaleString('ko-KR', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                });
+
+                return `
+                    <div class='question-item'>
+                        <h3>${escapeHtml(question.subject)}</h3>
+                        <p>${escapeHtml(question.content)}</p>
+                        <div class='date'>작성일: ${formattedDate}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // HTML 이스케이프 함수
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // 페이지 로드 시 질문 목록 불러오기
+        loadQuestions();
+    </script>
+</body>
+</html>
+
